@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#custom ignores
+
+/id
+response.json
+parsing_api_groups.py
