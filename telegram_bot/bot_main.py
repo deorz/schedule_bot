@@ -1,7 +1,7 @@
-import os
 import logging
 
 from aiogram import Bot, types
+from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils.executor import start_webhook
 from dotenv import load_dotenv
@@ -12,25 +12,17 @@ from api_parsing.utils import get_json_from_api, calculate_time
 from db_connection import create_engine_connection, Groups, Users
 from validators.api_validation import Schedule
 from telegram_bot.messages import HELP_MESSAGES, SCHEDULE_MESSAGE
-from main import app
+from settings import (API_URL, TELEGRAM_TOKEN, WEBAPP_HOST,
+                      WEBAPP_PORT, WEBHOOK_PATH, WEBHOOK_URL)
 
 load_dotenv()
 
-TELEGRAM_TOKEN = os.getenv('Telegram_token')
-API_URL = os.getenv('API_url')
-
 bot = Bot(token=TELEGRAM_TOKEN)
 dispatcher = Dispatcher(bot)
+dispatcher.middleware.setup(LoggingMiddleware())
 
 db_engine = create_engine_connection()
 session = Session(db_engine)
-
-WEBHOOK_HOST = 'https://deorz-bot.herokuapp.com'
-WEBHOOK_PATH = '/message'
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
-
-WEBAPP_HOST = 'localhost'
-WEBAPP_PORT = 5000
 
 logging.basicConfig(level=logging.INFO)
 
@@ -115,7 +107,7 @@ async def command_set_group(message: types.Message):
 
 
 async def on_startup(dispatcher):
-    await bot.set_webhook(WEBHOOK_URL)
+    await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
 
 
 async def on_shutdown(dispatcher):
@@ -124,14 +116,17 @@ async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+def main():
+    logging.basicConfig(level=logging.INFO)
     start_webhook(
         dispatcher=dispatcher,
         webhook_path=WEBHOOK_PATH,
-        on_startup=on_startup,
-        on_shutdown=on_shutdown,
         skip_updates=True,
+        on_startup=on_startup,
         host=WEBAPP_HOST,
         port=WEBAPP_PORT,
     )
+
+
+if __name__ == '__main__':
+    main()

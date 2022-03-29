@@ -1,14 +1,22 @@
-from flask import Flask, redirect
-from flask_sslify import SSLify
+def set_hook():
+    import asyncio
+    from telegram_bot.settings import (HEROKU_APP_NAME,
+                                       WEBHOOK_URL,
+                                       TELEGRAM_TOKEN)
+    from aiogram import Bot
+    bot = Bot(token=TELEGRAM_TOKEN)
 
-app = Flask(__name__)
-sslify = SSLify(app)
+    async def hook_set():
+        if not HEROKU_APP_NAME:
+            print('You have forgot to set HEROKU_APP_NAME')
+            quit()
+        await bot.set_webhook(WEBHOOK_URL)
+        print(await bot.get_webhook_info())
+
+    asyncio.run(hook_set())
+    bot.close()
 
 
-@app.route('/message', methods=['POST'])
-def index():
-    return redirect('http://localhost:5000')
-
-
-if __name__ == '__main__':
-    app.run()
+def start():
+    from telegram_bot.bot_main import main
+    main()

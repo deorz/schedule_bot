@@ -1,1 +1,1 @@
-worker: python telegram_bot/bot_main.py
+worker: amain start
