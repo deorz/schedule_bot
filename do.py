@@ -20,3 +20,7 @@ def set_hook():
 def start():
     from telegram_bot.bot_main import main
     main()
+
+
+if __name__ == '__main__':
+    start()
