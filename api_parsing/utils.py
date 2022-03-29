@@ -14,7 +14,7 @@ async def get_json_from_api(url, group_id, begin_date, end_date):
         return json
 
 
-def calculate_time(start_time=dt.datetime.now(), delta=6):
+def calculate_time(start_time=dt.datetime.now(), delta=0):
     locale.setlocale(locale.LC_TIME, "ru_RU")
     start_time_str = start_time.strftime('%Y.%m.%d')
     day_now = start_time.strftime('%a')

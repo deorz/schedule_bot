@@ -1,13 +1,14 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask_sslify import SSLify
 
 app = Flask(__name__)
 sslify = SSLify(app)
 
 
-@app.route('/')
+@app.route('/message', methods=['POST'])
 def index():
-    return '<h1>Flask APP works </h1>'
+    return redirect('http://localhost:5000')
+
 
 if __name__ == '__main__':
     app.run()
