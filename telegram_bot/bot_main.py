@@ -12,8 +12,9 @@ from api_parsing.utils import get_json_from_api, calculate_time
 from db_connection import create_engine_connection, Groups, Users
 from validators.api_validation import Schedule
 from telegram_bot.messages import HELP_MESSAGES, SCHEDULE_MESSAGE
-from settings import (API_URL, TELEGRAM_TOKEN, WEBAPP_HOST,
-                      WEBAPP_PORT, WEBHOOK_PATH, WEBHOOK_URL)
+from telegram_bot.settings import (API_URL, TELEGRAM_TOKEN, WEBAPP_HOST,
+                                   WEBAPP_PORT, WEBHOOK_PATH,
+                                   WEBHOOK_URL)
 
 load_dotenv()
 
