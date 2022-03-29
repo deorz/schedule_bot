@@ -1,1 +1,1 @@
-worker: amain start
+web: ado start
