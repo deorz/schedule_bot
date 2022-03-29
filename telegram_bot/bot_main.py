@@ -125,7 +125,7 @@ async def on_shutdown(dispatcher):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
     start_webhook(
         dispatcher=dispatcher,
         webhook_path=WEBHOOK_PATH,
