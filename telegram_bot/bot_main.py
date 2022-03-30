@@ -5,15 +5,14 @@ from aiogram.utils.executor import start_webhook
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from api_parsing.utils import calculate_time, get_json_from_api
+from api_parsing.utils import (calculate_time, get_json_from_api,
+                               get_schedule_message)
 from db_connection import Groups, Users, create_engine_connection
 from telegram_bot.keyboard import schedule_keyboard
-from telegram_bot.messages import (HELP_MESSAGES, LOGGER_MESSAGES,
-                                   SCHEDULE_MESSAGE)
+from telegram_bot.messages import (HELP_MESSAGES, LOGGER_MESSAGES)
 from telegram_bot.settings import (API_URL, TELEGRAM_TOKEN, WEBAPP_HOST,
                                    WEBAPP_PORT, WEBHOOK_PATH,
                                    WEBHOOK_URL, logger)
-from validators.api_validation import Schedule
 
 bot = Bot(token=TELEGRAM_TOKEN)
 dispatcher = Dispatcher(bot)
@@ -70,19 +69,7 @@ async def send_schedule(message: types.Message):
             begin_date=time.get('start_time_str'),
             end_date=time.get('end_time_str'))
         if response_json:
-            schedule_message = 'Расписание на {day_of_week}, {date}:\n\n'
-            for lesson_object in response_json:
-                lesson = Schedule.parse_obj(lesson_object)
-                schedule_message += SCHEDULE_MESSAGE.format(
-                    day_of_week=lesson.day_of_week,
-                    date=lesson.date,
-                    group=lesson.group,
-                    discipline=lesson.discipline,
-                    kind_of_work=lesson.kind_of_work,
-                    begin_lesson=lesson.begin_lesson,
-                    end_lesson=lesson.end_lesson,
-                    lecturer=lesson.lecturer
-                )
+            schedule_message = await get_schedule_message(response_json)
             await message.answer(text=schedule_message,
                                  reply_markup=schedule_keyboard)
         else:
