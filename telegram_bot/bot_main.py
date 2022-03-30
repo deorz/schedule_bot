@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from api_parsing.utils import calculate_time, get_json_from_api
 from db_connection import Groups, Users, create_engine_connection
+from telegram_bot.keyboard import schedule_keyboard
 from telegram_bot.messages import (HELP_MESSAGES, LOGGER_MESSAGES,
                                    SCHEDULE_MESSAGE)
 from telegram_bot.settings import (API_URL, TELEGRAM_TOKEN, WEBAPP_HOST,
@@ -24,17 +25,20 @@ session = Session(db_engine)
 
 @dispatcher.message_handler(commands=['start'])
 async def command_start(message: types.Message):
-    await message.answer(text=HELP_MESSAGES['start'])
+    await message.answer(text=HELP_MESSAGES['start'],
+                         reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler(commands=['help'])
 async def command_help(message: types.Message):
-    await message.answer(text=HELP_MESSAGES['help'])
+    await message.answer(text=HELP_MESSAGES['help'],
+                         reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler(commands=['set_group'])
 async def command_get_schedule(message: types.Message):
-    await message.answer(text=HELP_MESSAGES['set_group'])
+    await message.answer(text=HELP_MESSAGES['set_group'],
+                         reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler(commands=['group'])
@@ -42,11 +46,13 @@ async def command_group(message: types.Message):
     user = session.scalars(select(Users).filter(
         Users.chat_id == message.chat.id)).first()
     if user is None:
-        await message.answer(HELP_MESSAGES['user_not_exist'])
+        await message.answer(HELP_MESSAGES['user_not_exist'],
+                             reply_markup=schedule_keyboard)
     else:
         group = session.scalars(select(Groups).filter(
             Groups.group_id == user.group_id)).first()
-        await message.answer(text=f'Ваша группа {group.group_name}')
+        await message.answer(text=f'Ваша группа {group.group_name}',
+                             reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler(commands=['get_schedule'])
@@ -54,7 +60,8 @@ async def send_schedule(message: types.Message):
     user = session.scalars(select(Users).filter(
         Users.chat_id == message.chat.id)).first()
     if user is None:
-        await message.answer(HELP_MESSAGES['user_not_exist'])
+        await message.answer(HELP_MESSAGES['user_not_exist'],
+                             reply_markup=schedule_keyboard)
     else:
         time = calculate_time()
         response_json = await get_json_from_api(
@@ -75,9 +82,11 @@ async def send_schedule(message: types.Message):
                     end_lesson=lesson.end_lesson,
                     lecturer=lesson.lecturer
                 )
-                await message.answer(text=schedule_message)
+                await message.answer(text=schedule_message,
+                                     reply_markup=schedule_keyboard)
         else:
-            await message.answer(text='На сегодня пар нет.')
+            await message.answer(text='На сегодня пар нет.',
+                                 reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler(
@@ -88,7 +97,8 @@ async def command_set_group(message: types.Message):
         Groups.group_name == group_name)).first()
     if group is None:
         logger.error(LOGGER_MESSAGES['invalid_group'])
-        await message.answer(text=LOGGER_MESSAGES['invalid_group'])
+        await message.answer(text=LOGGER_MESSAGES['invalid_group'],
+                             reply_markup=schedule_keyboard)
     else:
         user = session.scalars(select(Users).filter(
             Users.chat_id == message.chat.id)).first()
@@ -99,19 +109,23 @@ async def command_set_group(message: types.Message):
                              )
             session.add(new_user)
             session.commit()
-            await message.answer(text='Ваша группа записана')
+            await message.answer(text='Ваша группа записана',
+                                 reply_markup=schedule_keyboard)
         else:
             user.group_id = group.group_id
             session.commit()
-            await message.answer(text='Ваша группа изменена')
+            await message.answer(text='Ваша группа изменена',
+                                 reply_markup=schedule_keyboard)
 
 
 @dispatcher.message_handler()
 async def cant_talk(message: types.Message):
     if message.text.startswith('/'):
-        await message.answer(HELP_MESSAGES['no_command'])
+        await message.answer(HELP_MESSAGES['no_command'],
+                             reply_markup=schedule_keyboard)
     else:
-        await message.answer(HELP_MESSAGES['cant_talk'])
+        await message.answer(HELP_MESSAGES['cant_talk'],
+                             reply_markup=schedule_keyboard)
 
 
 async def on_startup(dispatcher):
