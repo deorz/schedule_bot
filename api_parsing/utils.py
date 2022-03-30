@@ -29,8 +29,9 @@ async def get_schedule_message(response_json):
     schedule_message = 'Расписание на {day_of_week}, {date}:\n\n'
     for lesson_object in response_json:
         lesson = Schedule.parse_obj(lesson_object)
-        schedule_message.format(day_of_week=lesson.day_of_week,
-                                date=lesson.date)
+        schedule_message = schedule_message.format(
+            day_of_week=lesson.day_of_week,
+            date=lesson.date)
         schedule_message += SCHEDULE_MESSAGE.format(
             group=lesson.group,
             discipline=lesson.discipline,
