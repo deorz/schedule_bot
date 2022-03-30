@@ -70,9 +70,10 @@ async def send_schedule(message: types.Message):
             begin_date=time.get('start_time_str'),
             end_date=time.get('end_time_str'))
         if response_json:
+            schedule_message = 'Расписание на {day_of_week}, {date}:\n\n'
             for lesson_object in response_json:
                 lesson = Schedule.parse_obj(lesson_object)
-                schedule_message = SCHEDULE_MESSAGE.format(
+                schedule_message += SCHEDULE_MESSAGE.format(
                     day_of_week=lesson.day_of_week,
                     date=lesson.date,
                     group=lesson.group,
@@ -82,8 +83,8 @@ async def send_schedule(message: types.Message):
                     end_lesson=lesson.end_lesson,
                     lecturer=lesson.lecturer
                 )
-                await message.answer(text=schedule_message,
-                                     reply_markup=schedule_keyboard)
+            await message.answer(text=schedule_message,
+                                 reply_markup=schedule_keyboard)
         else:
             await message.answer(text='На сегодня пар нет.',
                                  reply_markup=schedule_keyboard)

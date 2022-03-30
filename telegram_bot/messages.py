@@ -13,13 +13,12 @@ HELP_MESSAGES = {
     'cant_talk': 'Я не умею общаться, могу только присылать расписание'
 }
 
-SCHEDULE_MESSAGE = ('Расписание на {day_of_week}, {date}:\n'
-                    'Группа: {group}\n'
+SCHEDULE_MESSAGE = ('Группа: {group}\n'
                     'Дисциплина: {discipline}\n'
                     'Тип занятия: {kind_of_work}\n'
                     'Начало занятия: {begin_lesson}\n'
                     'Конец занятия: {end_lesson}\n'
-                    'Преподаватель: {lecturer}'
+                    'Преподаватель: {lecturer}\n\n'
                     )
 
 LOGGER_MESSAGES = {
