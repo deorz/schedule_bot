@@ -80,11 +80,6 @@ async def send_schedule(message: types.Message):
             await message.answer(text='На сегодня пар нет.')
 
 
-@dispatcher.message_handler(commands=[r"\w+"])
-async def command_any(message: types.Message):
-    await message.answer(HELP_MESSAGES['no_command'])
-
-
 @dispatcher.message_handler(
     regexp=r"^[А-Я|а-я]*-\d{2,3}[А-Я|а-я]?-\d{2}")
 async def command_set_group(message: types.Message):
@@ -113,7 +108,10 @@ async def command_set_group(message: types.Message):
 
 @dispatcher.message_handler()
 async def cant_talk(message: types.Message):
-    await message.answer(HELP_MESSAGES['cant_talk'])
+    if message.text.startswith('/'):
+        await message.answer(HELP_MESSAGES['no_command'])
+    else:
+        await message.answer(HELP_MESSAGES['cant_talk'])
 
 
 async def on_startup(dispatcher):
