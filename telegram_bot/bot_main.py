@@ -80,7 +80,7 @@ async def send_schedule(message: types.Message):
             await message.answer(text='На сегодня пар нет.')
 
 
-@dispatcher.message_handler(commands=[''])
+@dispatcher.message_handler(commands=[r"\w+"])
 async def command_any(message: types.Message):
     await message.answer(HELP_MESSAGES['no_command'])
 
@@ -109,6 +109,11 @@ async def command_set_group(message: types.Message):
             user.group_id = group.group_id
             session.commit()
             await message.answer(text='Ваша группа изменена')
+
+
+@dispatcher.message_handler()
+async def cant_talk(message: types.Message):
+    await message.answer(HELP_MESSAGES['cant_talk'])
 
 
 async def on_startup(dispatcher):
