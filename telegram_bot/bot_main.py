@@ -80,6 +80,11 @@ async def send_schedule(message: types.Message):
             await message.answer(text='На сегодня пар нет.')
 
 
+@dispatcher.message_handler(commands=[''])
+async def command_any(message: types.Message):
+    await message.answer(HELP_MESSAGES['no_command'])
+
+
 @dispatcher.message_handler(
     regexp=r"^[А-Я|а-я]*-\d{2,3}[А-Я|а-я]?-\d{2}")
 async def command_set_group(message: types.Message):
