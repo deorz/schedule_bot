@@ -5,6 +5,7 @@ button_group = KeyboardButton('/group')
 button_help = KeyboardButton('/help')
 button_get_schedule = KeyboardButton('/get_schedule')
 
-schedule_keyboard = ReplyKeyboardMarkup().row(button_set_group,
-                                              button_group).add(
+schedule_keyboard = ReplyKeyboardMarkup(
+    resize_keyboard=True).row(button_set_group,
+                              button_group).add(
     button_get_schedule).add(button_help)
