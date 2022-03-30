@@ -1,18 +1,8 @@
-import os
-
-from dotenv import load_dotenv
-from sqlalchemy import Column, ForeignKey, Integer, String, select
+from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, Session
-from sqlalchemy import create_engine
+from sqlalchemy.orm import relationship
 
-load_dotenv()
-
-HOST = os.getenv('host')
-USERNAME = os.getenv('user')
-PASSWORD = os.getenv('password')
-DB_NAME = os.getenv('db_name')
-PORT = os.getenv('port')
+from telegram_bot.settings import DB_NAME, HOST, PASSWORD, PORT, USERNAME
 
 
 def create_engine_connection():

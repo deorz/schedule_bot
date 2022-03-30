@@ -19,3 +19,15 @@ SCHEDULE_MESSAGE = ('Расписание на {day_of_week}, {date}:\n'
                     'Конец занятия: {end_lesson}\n'
                     'Преподаватель: {lecturer}'
                     )
+
+LOGGER_MESSAGES = {
+    'variables_error': 'Отсутствуют обязательные переменные окружения '
+                       'во время запуска бота',
+    'message_not_sent': 'Сбой при отправке сообщения в Telegram',
+    'endpoint_inaccessibility': 'Эндпоинт {} недоступен',
+    'jsonDecode_error': 'Невозможно преобразовать ответ от API к объекту'
+                        'Python',
+    'invalid_group': 'Такой группы не существует :(',
+    'webhook_set': 'Webhook успешно поднят, бот запущен...',
+    'shutdown': 'Webhook удаляется, до свидания...'
+}

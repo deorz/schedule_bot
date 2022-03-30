@@ -1,15 +1,14 @@
 def set_hook():
     import asyncio
-    from telegram_bot.settings import (HEROKU_APP_NAME,
-                                       WEBHOOK_URL,
-                                       TELEGRAM_TOKEN)
+
     from aiogram import Bot
+
+    from telegram_bot.settings import (TELEGRAM_TOKEN, WEBHOOK_URL,
+                                       variables_check)
     bot = Bot(token=TELEGRAM_TOKEN)
 
     async def hook_set():
-        if not HEROKU_APP_NAME:
-            print('You have forgot to set HEROKU_APP_NAME')
-            quit()
+        variables_check()
         await bot.set_webhook(WEBHOOK_URL)
         print(await bot.get_webhook_info())
 
