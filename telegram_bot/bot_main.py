@@ -91,8 +91,7 @@ async def command_set_group(message: types.Message):
         user = session.scalars(select(Users).filter(
             Users.chat_id == message.chat.id)).first()
         if user is None:
-            new_user = Users(username=message.chat.username,
-                             chat_id=message.chat.id,
+            new_user = Users(chat_id=message.chat.id,
                              group_id=group.group_id,
                              )
             session.add(new_user)
