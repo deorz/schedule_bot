@@ -22,6 +22,7 @@ In telegram you can find in
 
 #### Database:
 - PostgreSQL with psycopg connector
+- SQLAlchemy ORM
 
 
 
