@@ -26,6 +26,7 @@ class Users(BaseClass):
     __tablename__ = 'Users'
 
     id = Column(Integer, primary_key=True, unique=True)
+    username = Column(String(250), nullable=True)
     chat_id = Column(Integer)
     group_id = Column(Integer, ForeignKey('Groups.group_id'))
     Group = relationship('Groups')

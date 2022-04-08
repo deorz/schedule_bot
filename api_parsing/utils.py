@@ -33,7 +33,6 @@ async def get_schedule_message(response_json):
             day_of_week=lesson.day_of_week,
             date=lesson.date)
         schedule_message += SCHEDULE_MESSAGE.format(
-            group=lesson.group,
             discipline=lesson.discipline,
             kind_of_work=lesson.kind_of_work,
             begin_lesson=lesson.begin_lesson,
@@ -45,9 +44,15 @@ async def get_schedule_message(response_json):
 
 def calculate_time(start_time=dt.datetime.now(tz=timezone_offset),
                    delta=0):
-    start_time_str = start_time.strftime('%Y.%m.%d')
+    end_lessons_time = dt.datetime.strptime('18:30', '%H:%M')
+    next_day_delta = dt.timedelta(days=1)
     delta = dt.timedelta(days=delta)
-    end_time = start_time + delta
+    if end_lessons_time.time() < start_time.time():
+        start_time_str = (next_day_delta + start_time).strftime('%Y.%m.%d')
+        end_time = start_time + delta + next_day_delta
+    else:
+        start_time_str = start_time.strftime('%Y.%m.%d')
+        end_time = start_time + delta
     end_time_str = end_time.strftime('%Y.%m.%d')
     return {
         'start_time_str': start_time_str,

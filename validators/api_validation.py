@@ -3,7 +3,6 @@ from pydantic import BaseModel, Field, validator
 
 class Schedule(BaseModel):
     date: str
-    group: str
     kind_of_work: str = Field(alias='kindOfWork')
     lecturer: str
     begin_lesson: str = Field(alias='beginLesson')
@@ -16,10 +15,4 @@ class Schedule(BaseModel):
     def validate_stream(cls, value):
         if value is None:
             value = 'Это не потоковая лекция'
-        return value
-
-    @validator('group', pre=True)
-    def validate_group(cls, value):
-        if value is None:
-            value = "Группа не указана"
         return value
